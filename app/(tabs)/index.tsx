@@ -5,10 +5,11 @@ import EmojiPicker from "@/components/EmojiPicker";
 import EmojiSticker from "@/components/EmojiSticker";
 import IconButton from "@/components/IconButton";
 import ImageViewer from "@/components/ImageViewer";
+import domtoimage from "dom-to-image";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import { useEffect, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import { captureRef } from "react-native-view-shot";
 
 export default function Index() {
@@ -57,18 +58,39 @@ export default function Index() {
   };
 
   const onSaveImageAsync = async () => {
-    try {
-      const uri = await captureRef(imageRef, {
-        height: 440,
-        quality: 1,
-      });
+    if (Platform.OS === "web") {
+      const node = imageRef.current;
+      if (node) {
+        try {
+          //@ts-ignore
+          const dataUrl = await domtoimage.toPng(imageRef.current, {
+            quality: 0.5,
+            width: 320,
+            height: 440,
+          });
 
-      await MediaLibrary.saveToLibraryAsync(uri);
-      if (uri) {
-        alert("Image saved to gallery!");
+          let link = document.createElement("a");
+          link.download = "sticker-smash.png";
+          link.href = dataUrl;
+          link.click();
+        } catch (error) {
+          console.error("Error saving image:", error);
+        }
       }
-    } catch (error) {
-      console.error("Error capturing image:", error);
+    } else {
+      try {
+        const uri = await captureRef(imageRef, {
+          height: 440,
+          quality: 1,
+        });
+
+        await MediaLibrary.saveToLibraryAsync(uri);
+        if (uri) {
+          alert("Image saved to gallery!");
+        }
+      } catch (error) {
+        console.error("Error capturing image:", error);
+      }
     }
   };
 
