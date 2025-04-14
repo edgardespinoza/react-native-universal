@@ -5,8 +5,13 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "sticker",
     "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#673ab7"
+    },
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
@@ -16,6 +21,11 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#673ab7"
       }
+    },
+    "androidStatusBar": {
+      "backgroundColor": "#673ab7",
+      "barStyle": "light-content",
+      "translucent": false
     },
     "androidNavigationBar": {
       "backgroundColor": "#673ab7",
